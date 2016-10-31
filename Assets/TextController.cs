@@ -7,29 +7,29 @@ public class TextController : MonoBehaviour {
 
 	public Text text;
 	
-	private enum States {intro, cell_0, mirror_0, get_mirror, sheets_0, door_0, cell_1, mirror_1, sheets_1, door_1, freedom, ending};
+	private enum States {intro, cell_0, mirror_0, get_mirror, sheets_0, door_0, cell_1, mirror_1, sheets_1, door_1, freedom, open_door};
 	private States myState = States.intro;
-	private bool gotMirror = false;
+	private bool openedDoor = false;
 
 	// Use this for initialization
 	void Start () {
 		text.text = "Your family's soap scum cleaning business has been a hit, and " +
-				"you now employ over 30 people in the community. One day, " +
-				"you were invited to clean soap scum at the governor's mansion. " +
-				"Needless to say, it was a great honor for a once poor family " +
-				"such as your own. Dreaming of riches, you headed off to the palace " +
-				"barely able to keep your heart in your chest. You were told to enter " +
-				"the servant's entrance, and to keep to yourself. No talking, don't even look " +
-				"at the governor or his family. Still, you floated up the staircase to the bathroom " + 
-				"like a butterfly on the breeze, and got to work scrubbing the tub with joy. " +
-				"As cruel fate would have it, the governor's daughter was unaware that anyone would " +
-				"be cleaning her bathtub that day. Wrapped in a towel, she screamed as she saw " +
-				"a burly buttcrack bent over the rim of her treasured bathtub. " +
-				"She dropped her towel as she shrieked, and, as you looked back, startled, " +
-				"you realized that birth marks are oddly common in the governor's family. " +
-				"You have been charged with attempted assassination, your family is a disgrace, " +
-				"the trial and execution are tomorrow... YOU MUST FIND A WAY TO ESCAPE!\n" +
-				"Press SPACE to look around.";
+					"you now employ over 30 people in the community. One day, " +
+					"you were invited to clean soap scum at the governor's mansion. " +
+					"Needless to say, it was a great honor for a once poor family " +
+					"such as your own. Dreaming of riches, you headed off to the palace " +
+					"barely able to keep your heart in your chest. You were told to enter " +
+					"the servant's entrance, and to keep to yourself. No talking, don't even look " +
+					"at the governor or his family. Still, you floated up the staircase to the bathroom " + 
+					"like a butterfly on the breeze, and got to work scrubbing the tub with joy. " +
+					"As cruel fate would have it, the governor's daughter was unaware that anyone would " +
+					"be cleaning her bathtub that day. Wrapped in a towel, she screamed as she saw " +
+					"a burly buttcrack bent over the rim of her treasured bathtub. " +
+					"She dropped her towel as she shrieked, and, as you looked back, startled, " +
+					"you realized that birth marks are oddly common in the governor's family. " +
+					"You have been charged with attempted assassination, your family is a disgrace, " +
+					"the trial and execution are tomorrow... YOU MUST FIND A WAY TO ESCAPE!\n" +
+					"Press SPACE to look around.";
 	}
 	
 	// Update is called once per frame
@@ -45,7 +45,7 @@ public class TextController : MonoBehaviour {
 		else if (myState == States.sheets_1) 	{state_sheets_1();}
 		else if (myState == States.door_1) 		{state_door_1();}
 		else if (myState == States.freedom) 	{state_freedom();}
-		else if (myState == States.ending) 	{state_ending();}
+		else if (myState == States.open_door) 	{state_open_door();}
 	}
 	
 	void state_cell_0 () {
@@ -142,10 +142,14 @@ public class TextController : MonoBehaviour {
 					"You can already feel the door start opening before you even push it... " +
 					"Can it really be this simple? Download the Prison Break DLC for $2.99 to find out!" +
 					"\nPress Space to continue.";
-		if (Input.GetKeyDown(KeyCode.Space)) 	{myState = States.ending;}
+		if (Input.GetKeyDown(KeyCode.Space)) 	{myState = States.openDoor;}
 	}
 
-	void state_ending () {
-		text.text = "\n\n\n\t\t\t\t\tTHE END?";
+	void state_open_door () {
+		text.text = "Ok, we'll give you a little more for free. (but not much cheapskate!)\n" +
+					"The door swings open with ease, too easy, because it goes all the way around " +
+					"and clangs against the wall. The noise is loud and echoes through the corridor. " +
+					"The guard down the hall snorts and bit, but he doesn't wake up. He's really out cold.\n\n" +
+					"Press SPACE to continue into the corridor."
 	}
 }
