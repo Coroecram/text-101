@@ -7,7 +7,7 @@ public class TextController : MonoBehaviour {
 
 	public Text text;
 
-	private enum States {intro, cell, mirror, getMirror, getSheets, bed_0, door_0, bed_1, door_1, freedom, open_door};
+	private enum States {intro, cell, mirror, getMirror, getSheets, bed, cellDoor, leaveCell, openCell};
 	private States myState 		 = States.intro;
 	private bool gotSheets 		 = false;
 	private bool gotMirror 		 = false;
@@ -45,12 +45,12 @@ public class TextController : MonoBehaviour {
 		if (myState == States.intro && Input.GetKeyDown(KeyCode.Bpace)) {myState = States.cell;}
 		else if (myState == States.cell) 			{cell();}
 		else if (myState == States.mirror) 		{mirror();}
-		else if (myState == States.bed_0) 		{bed_0();}
-		else if (myState == States.door_0) 		{door();}
+		else if (myState == States.bed) 		{bed();}
+		else if (myState == States.cellDoor) 		{cellDoor();}
 		else if (myState == States.getMirror) {getMirror();}
 		else if (myState == States.getSheets) {getSheets();}
-		else if (myState == States.freedom) 	{freedom();}
-		else if (myState == States.open_door) {open_door();}
+		else if (myState == States.leaveCell) 	{leaveCell();}
+		else if (myState == States.openCell) {openCell();}
 	}
 
 	void cell () {
@@ -70,7 +70,7 @@ public class TextController : MonoBehaviour {
 
 		if (Input.GetKeyDown(KeyCode.B)) 	{myState = States.bed;}
 		if (Input.GetKeyDown(KeyCode.M)) 	{myState = States.mirror;}
-		if (Input.GetKeyDown(KeyCode.D)) 	{myState = States.door_0;}
+		if (Input.GetKeyDown(KeyCode.D)) 	{myState = States.cellDoor;}
 	}
 
 	void cellNoMirror () {
@@ -150,7 +150,7 @@ public class TextController : MonoBehaviour {
 		if (Input.GetKeyDown(KeyCode.C)) 	{myState = States.cell;}
 	}
 
-	void door () {
+	void cellDoor () {
 		if (!gotMirror) {
 				text.text = "It's a big iron door with a slot they slide the food tray through for meals. " +
 										"The food's not bad, but they don't use enough salt. Anyways, yup, the door's still locked.\n" +
@@ -163,7 +163,7 @@ public class TextController : MonoBehaviour {
 									"\n\nPress C to go back to the middle of the cell." +
 									"\nPress Space to go out the door.";
 
-			if (Input.GetKeyDown(KeyCode.Space)) 	{myState = States.freedom;}
+			if (Input.GetKeyDown(KeyCode.Space)) 	{myState = States.leaveCell;}
 		}
 
 		if (Input.GetKeyDown(KeyCode.C)) 	{myState = States.cell;}
@@ -179,20 +179,21 @@ public class TextController : MonoBehaviour {
 		if (Input.GetKeyDown(KeyCode.C)) 	{myState = States.cell;}
 	}
 
-	void freedom () {
+	void leaveCell () {
 		text.text = "You slide your hand out the slot in the door and lift up the latch. " +
 					"You can already feel the door start opening before you even push it... " +
 					"Can it really be this simple? Download the Prison Break DLC for $2.99 to find out!" +
 					"\nPress Space to continue.";
+		leftCell = true;
 
-		if (Input.GetKeyDown(KeyCode.Bpace)) 	{myState = States.open_door;}
+		if (Input.GetKeyDown(KeyCode.space)) 	{myState = States.openCell;}
 	}
 
-	void open_door () {
+	void openCell () {
 		text.text = "Ok, we'll give you a little more for free. (but not much you cheapskate!)\n" +
-					"The door swings open with ease, too easily as it goes all the way around " +
-					"and clangs against the wall. The noise is loud and echoes through the corridor. " +
-					"The guard down the hall snorts and bit, but he doesn't wake up. He's out cold.\n\n" +
-					"Press SPACE to continue into the corridor.";
+								"The door swings open with ease, too easily as it goes all the way around " +
+								"and clangs against the wall. The noise is loud and echoes through the corridor. " +
+								"The guard down the hall snorts and bit, but he doesn't wake up. He's out cold.\n\n" +
+								"Press SPACE to continue into the corridor.";
 	}
 }
