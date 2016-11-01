@@ -8,14 +8,17 @@ public class TextController : MonoBehaviour {
 	public Text text;
 
 	private enum States {intro, cell, mirror, getMirror, getSheets, bed, cellDoor, leaveCell, openCell,
-											corridor, closet, insideCloset, guard, stairwell, bathroom, stalls, shower, outsideDoor};
-	private States myState 		 = States.intro;
+											corridor, closet, openCloset, insideCloset, getBroom, getUniform, guard, getKeyring, stairwell,
+											gate, openGate, bathroom, toilet, useToilet, unclogToilet shower, useShower, cleanShower, exit};
+
+	private States myState 		 = States.corridor;
 	private bool gotSheets 		 = false;
 	private bool gotMirror 		 = false;
 	private bool leftCell 		 = false;
 	private bool gotJanitorKey = false;
 	private bool closetOpen		 = false;
-	private bool gotRag 			 = false;
+	private bool usedToilet		 = false;
+	private bool gotRag				 = false;
 	private bool cleanedShower = false;
 	private bool gotBroom 		 = false;
 	private bool gotKeyring 	 = false;
@@ -45,14 +48,34 @@ public class TextController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (myState == States.intro && Input.GetKeyDown(KeyCode.Space)) {myState = States.cell;}
-		else if (myState == States.cell) 			{cell();}
-		else if (myState == States.mirror) 		{mirror();}
-		else if (myState == States.bed) 		{bed();}
-		else if (myState == States.cellDoor) 		{cellDoor();}
-		else if (myState == States.getMirror) {getMirror();}
-		else if (myState == States.getSheets) {getSheets();}
-		else if (myState == States.leaveCell) 	{leaveCell();}
-		else if (myState == States.openCell) {openCell();}
+		else if (myState == States.cell) 					{cell();}
+		else if (myState == States.mirror) 				{mirror();}
+		else if (myState == States.bed) 					{bed();}
+		else if (myState == States.cellDoor) 			{cellDoor();}
+		else if (myState == States.getMirror) 		{getMirror();}
+		else if (myState == States.getSheets) 		{getSheets();}
+		else if (myState == States.leaveCell) 		{leaveCell();}
+		else if (myState == States.openCell) 			{openCell();}
+		else if (myState == States.corridor) 			{corridor();}
+		else if (myState == States.closet) 			  {closet();}
+		else if (myState == States.openCloset) 		{openCloset();}
+		else if (myState == States.insideCloset)  {insideCloset();}
+		else if (myState == States.getBroom) 			{getBroom();}
+		else if (myState == States.getUniform) 		{getUniform();}
+		else if (myState == States.guard) 				{guard();}
+		else if (myState == States.getKeyring) 		{getKeyring();}
+		else if (myState == States.stairwell) 		{stairwell();}
+		else if (myState == States.gate) 					{gate();}
+		else if (myState == States.openGate) 			{openGate();}
+		else if (myState == States.bathroom) 			{bathroom();}
+		else if (myState == States.toilet) 				{toilet();}
+		else if (myState == States.useToilet) 		{useToilet();}
+		else if (myState == States.clogged) 			{clogged();}
+		else if (myState == States.unclogToilet) 				{unclogToilet();}
+		else if (myState == States.shower)			  {shower();}
+		else if (myState == States.useShower) 		{useShower();}
+		else if (myState == States.cleanShower) 	{cleanShower();}
+		else if (myState == States.exit)				 	{exit();}
 	}
 
 	void cell () {
@@ -206,6 +229,137 @@ public class TextController : MonoBehaviour {
 								"Press SPACE to continue into the corridor.";
 
 		if (Input.GetKeyDown(KeyCode.Space)) 	{myState = States.corridor;}
+	}
+
+	void corridor () {
+		text.text = "corridor"
+
+		if (Input.GetKeyDown(KeyCode.G)) 	{myState = States.guard;}
+		if (Input.GetKeyDown(KeyCode.C)) 	{myState = States.closet;}
+		if (Input.GetKeyDown(KeyCode.S)) 	{myState = States.stairwell;}
+	}
+
+	void closet () {
+		text.text = "closet"
+
+		if (Input.GetKeyDown(KeyCode.O)) 	{myState = States.insideCloset;}
+		if (Input.GetKeyDown(KeyCode.C)) 	{myState = States.corridor;}
+	}
+
+	void openCloset () {
+		text.text = "openCloset";
+		closetOpen = true;
+
+		if (Input.GetKeyDown(KeyCode.C)) 	{myState = States.corridor;}
+		if (Input.GetKeyDown(KeyCode.Space)) 	{myState = States.insideCloset;}
+	}
+
+	void insideCloset () {
+		text.text = "insideCloset"
+
+		if (Input.GetKeyDown(KeyCode.B)) 	{myState = States.getBroom;}
+		if (Input.GetKeyDown(KeyCode.U)) 	{myState = States.getUniform;}
+		if (Input.GetKeyDown(KeyCode.C)) 	{myState = States.corridor;}
+	}
+
+	void getBroom () {
+		text.text = "getBroom"
+		gotBroom = true;
+
+		if (Input.GetKeyDown(KeyCode.Space)) 	{myState = States.insideCloset;}
+	}
+
+	void getUniform () {
+		text.text = "getUniform"
+		gotUniform = true;
+
+		if (Input.GetKeyDown(KeyCode.Space)) 	{myState = States.insideCloset;}
+	}
+
+	void guard () {
+		text.text = "guard"
+
+		if (Input.GetKeyDown(KeyCode.K)) 	{myState = States.getKeyring;}
+	}
+
+	void getKeyring () {
+		text.text = "getKeyring"
+		gotKeyring = true;
+
+		if (Input.GetKeyDown(KeyCode.Space)) 	{myState = States.guard;}
+	}
+
+	void stairwell () {
+		text.text = "stairwell"
+
+		if (Input.GetKeyDown(KeyCode.G)) 	{myState = States.gate;}
+		if (Input.GetKeyDown(KeyCode.B)) 	{myState = States.bathroom;}
+	}
+
+	void gate () {
+		text.text = "gate"
+
+		if (Input.GetKeyDown(KeyCode.O)) 	{myState = States.openGate;}
+		if (Input.GetKeyDown(KeyCode.S)) 	{myState = States.stairwell;}
+	}
+
+	void openGate () {
+		text.text = "openGate"
+
+		if (Input.GetKeyDown(KeyCode.Space)) 	{myState = States.exit;}
+	}
+
+	void bathroom () {
+		text.text = "bathroom"
+
+		if (Input.GetKeyDown(KeyCode.T)) 	{myState = States.toilet;}
+		if (Input.GetKeyDown(KeyCode.S)) 	{myState = States.shower;}
+	}
+
+	void toilet () {
+		text.text = "toilet"
+
+		if (Input.GetKeyDown(KeyCode.U)) 	{myState = States.useToilet;}
+	}
+
+	void useToilet () {
+		text.text = "useToilet"
+		usedToilet = true;
+
+		if (Input.GetKeyDown(KeyCode.B)) 	{myState = States.bathroom;}
+		if (Input.GetKeyDown(KeyCode.U)) 	{myState = States.unclogToilet;}
+	}
+
+	void unclogToilet () {
+		text.text = "unclogToilet"
+		gotRag = true;
+
+		if (Input.GetKeyDown(KeyCode.Space)) 	{myState = States.toilet;}
+	}
+
+	void shower () {
+		text.text = "shower"
+
+		if (Input.GetKeyDown(KeyCode.U)) 	{myState = States.useShower;}
+		if (Input.GetKeyDown(KeyCode.C)) 	{myState = States.cleanShower;}
+		if (Input.GetKeyDown(KeyCode.B)) 	{myState = States.bathroom;}
+	}
+
+	void useShower () {
+		text.text = "useShower"
+
+		if (Input.GetKeyDown(KeyCode.Space)) 	{myState = States.shower;}
+	}
+
+	void cleanShower () {
+		text.text = "cleanShower"
+		gotJanitorKey = true;
+
+		if (Input.GetKeyDown(KeyCode.Space)) 	{myState = States.shower;}
+	}
+
+	void exit () {
+		text.text = "exit"
 	}
 
 }
