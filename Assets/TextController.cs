@@ -7,9 +7,7 @@ public class TextController : MonoBehaviour {
 
 	public Text text;
 
-	private enum States {intro, cell, mirror, getMirror, getSheets, bed, cellDoor, leaveCell, openCell,
-											corridor, closet, openCloset, insideCloset, getBroom, getUniform, guard, getKeyring, stairwell,
-											gate, openGate, bathroom, toilet, useToilet, unclogToilet shower, useShower, cleanShower, exit};
+	private enum States {intro, cell, mirror, getMirror, getSheets, bed, cellDoor, leaveCell, openCell, corridor, closet, openCloset, insideCloset, getBroom, getUniform, guard, getKeyring, stairwell,	gate, openGate, bathroom, toilet, useToilet, clogged, unclogToilet, shower, useShower, cleanShower, exit};
 
 	private States myState 		 = States.corridor;
 	private bool gotSheets 		 = false;
@@ -19,6 +17,7 @@ public class TextController : MonoBehaviour {
 	private bool closetOpen		 = false;
 	private bool usedToilet		 = false;
 	private bool gotRag				 = false;
+	private bool cloggedToilet = false;
 	private bool cleanedShower = false;
 	private bool gotBroom 		 = false;
 	private bool gotKeyring 	 = false;
@@ -71,7 +70,7 @@ public class TextController : MonoBehaviour {
 		else if (myState == States.toilet) 				{toilet();}
 		else if (myState == States.useToilet) 		{useToilet();}
 		else if (myState == States.clogged) 			{clogged();}
-		else if (myState == States.unclogToilet) 				{unclogToilet();}
+		else if (myState == States.unclogToilet) 	{unclogToilet();}
 		else if (myState == States.shower)			  {shower();}
 		else if (myState == States.useShower) 		{useShower();}
 		else if (myState == States.cleanShower) 	{cleanShower();}
@@ -232,7 +231,7 @@ public class TextController : MonoBehaviour {
 	}
 
 	void corridor () {
-		text.text = "corridor"
+		text.text = "corridor";
 
 		if (Input.GetKeyDown(KeyCode.G)) 	{myState = States.guard;}
 		if (Input.GetKeyDown(KeyCode.C)) 	{myState = States.closet;}
@@ -240,9 +239,9 @@ public class TextController : MonoBehaviour {
 	}
 
 	void closet () {
-		text.text = "closet"
+		text.text = "closet";
 
-		if (Input.GetKeyDown(KeyCode.O)) 	{myState = States.insideCloset;}
+		if (Input.GetKeyDown(KeyCode.O)) 	{myState = States.openCloset;}
 		if (Input.GetKeyDown(KeyCode.C)) 	{myState = States.corridor;}
 	}
 
@@ -255,7 +254,7 @@ public class TextController : MonoBehaviour {
 	}
 
 	void insideCloset () {
-		text.text = "insideCloset"
+		text.text = "insideCloset";
 
 		if (Input.GetKeyDown(KeyCode.B)) 	{myState = States.getBroom;}
 		if (Input.GetKeyDown(KeyCode.U)) 	{myState = States.getUniform;}
@@ -263,82 +262,95 @@ public class TextController : MonoBehaviour {
 	}
 
 	void getBroom () {
-		text.text = "getBroom"
+		text.text = "getBroom";
 		gotBroom = true;
 
 		if (Input.GetKeyDown(KeyCode.Space)) 	{myState = States.insideCloset;}
 	}
 
 	void getUniform () {
-		text.text = "getUniform"
+		text.text = "getUniform";
 		gotUniform = true;
 
 		if (Input.GetKeyDown(KeyCode.Space)) 	{myState = States.insideCloset;}
 	}
 
 	void guard () {
-		text.text = "guard"
+		text.text = "guard";
 
 		if (Input.GetKeyDown(KeyCode.K)) 	{myState = States.getKeyring;}
+		if (Input.GetKeyDown(KeyCode.C)) 	{myState = States.corridor;}
 	}
 
 	void getKeyring () {
-		text.text = "getKeyring"
+		text.text = "getKeyring";
 		gotKeyring = true;
 
 		if (Input.GetKeyDown(KeyCode.Space)) 	{myState = States.guard;}
 	}
 
 	void stairwell () {
-		text.text = "stairwell"
+		text.text = "stairwell";
 
 		if (Input.GetKeyDown(KeyCode.G)) 	{myState = States.gate;}
+		if (Input.GetKeyDown(KeyCode.C)) 	{myState = States.corridor;}
 		if (Input.GetKeyDown(KeyCode.B)) 	{myState = States.bathroom;}
 	}
 
 	void gate () {
-		text.text = "gate"
+		text.text = "gate";
 
 		if (Input.GetKeyDown(KeyCode.O)) 	{myState = States.openGate;}
 		if (Input.GetKeyDown(KeyCode.S)) 	{myState = States.stairwell;}
 	}
 
 	void openGate () {
-		text.text = "openGate"
+		text.text = "openGate";
 
 		if (Input.GetKeyDown(KeyCode.Space)) 	{myState = States.exit;}
 	}
 
 	void bathroom () {
-		text.text = "bathroom"
+		text.text = "bathroom";
 
 		if (Input.GetKeyDown(KeyCode.T)) 	{myState = States.toilet;}
 		if (Input.GetKeyDown(KeyCode.S)) 	{myState = States.shower;}
+		if (Input.GetKeyDown(KeyCode.B)) 	{myState = States.stairwell;}
 	}
 
 	void toilet () {
-		text.text = "toilet"
+		text.text = "toilet";
 
 		if (Input.GetKeyDown(KeyCode.U)) 	{myState = States.useToilet;}
+		if (Input.GetKeyDown(KeyCode.B)) 	{myState = States.bathroom;}
 	}
 
 	void useToilet () {
-		text.text = "useToilet"
+		text.text = "useToilet";
 		usedToilet = true;
+		cloggedToilet = true;
+
+		if (Input.GetKeyDown(KeyCode.B)) 	{myState = States.bathroom;}
+		if (Input.GetKeyDown(KeyCode.U)) 	{myState = States.unclogToilet;}
+	}
+
+	void clogged () {
+		text.text = "clogged";
 
 		if (Input.GetKeyDown(KeyCode.B)) 	{myState = States.bathroom;}
 		if (Input.GetKeyDown(KeyCode.U)) 	{myState = States.unclogToilet;}
 	}
 
 	void unclogToilet () {
-		text.text = "unclogToilet"
+		text.text = "unclogToilet";
 		gotRag = true;
+		cloggedToilet = false;
 
 		if (Input.GetKeyDown(KeyCode.Space)) 	{myState = States.toilet;}
 	}
 
 	void shower () {
-		text.text = "shower"
+		text.text = "shower";
 
 		if (Input.GetKeyDown(KeyCode.U)) 	{myState = States.useShower;}
 		if (Input.GetKeyDown(KeyCode.C)) 	{myState = States.cleanShower;}
@@ -346,20 +358,22 @@ public class TextController : MonoBehaviour {
 	}
 
 	void useShower () {
-		text.text = "useShower"
+		text.text = "useShower";
 
 		if (Input.GetKeyDown(KeyCode.Space)) 	{myState = States.shower;}
 	}
 
 	void cleanShower () {
-		text.text = "cleanShower"
+		text.text = "cleanShower";
 		gotJanitorKey = true;
 
 		if (Input.GetKeyDown(KeyCode.Space)) 	{myState = States.shower;}
 	}
 
 	void exit () {
-		text.text = "exit"
+		text.text = "exit";
+
+		if (Input.GetKeyDown(KeyCode.Space)) 	{myState = States.stairwell;}
 	}
 
 }
