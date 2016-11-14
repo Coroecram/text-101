@@ -7,7 +7,7 @@ public class TextController : MonoBehaviour {
 
 	public Text text;
 
-	private enum States {intro, cell, mirror, getMirror, getSheets, bed, cellDoor, leaveCell, openCell, corridor, closet, openCloset, insideCloset, getBroom, getUniform, guard, getKeyring, stairwell,	gate, openGate, bathroom, toilet, useToilet, clogged, unclogToilet, shower, useShower, cleanShower, exit};
+	private enum States {intro, cell, mirror, getMirror, getSheets, bed, cellDoor, leaveCell, openCell, corridor, closet, openCloset, getBroom, getUniform, eatRoach, eatMouse, drinkBleach, guard, getKeyring, stairwell,	gate, openGate, bathroom, toilet, useToilet, clogged, unclogToilet, shower, useShower, cleanShower, exit};
 
 	private States myState 		 = States.corridor;
 	private bool gotSheets 		 = false;
@@ -22,6 +22,7 @@ public class TextController : MonoBehaviour {
 	private bool gotBroom 		 = false;
 	private bool gotKeyring 	 = false;
 	private bool gotUniform 	 = false;
+	private bool ateMouse 		 = false;
 
 	// Use this for initialization
 	void Start () {
@@ -58,9 +59,11 @@ public class TextController : MonoBehaviour {
 		else if (myState == States.corridor) 			{corridor();}
 		else if (myState == States.closet) 			  {closet();}
 		else if (myState == States.openCloset) 		{openCloset();}
-		else if (myState == States.insideCloset)  {insideCloset();}
 		else if (myState == States.getBroom) 			{getBroom();}
 		else if (myState == States.getUniform) 		{getUniform();}
+		else if (myState == States.eatRoach)			{eatRoach();}
+		else if (myState == States.eatMouse)			{eatMouse();}
+		else if (myState == States.drinkBleach)	  {drinkBleach();}
 		else if (myState == States.guard) 				{guard();}
 		else if (myState == States.getKeyring) 		{getKeyring();}
 		else if (myState == States.stairwell) 		{stairwell();}
@@ -169,13 +172,13 @@ public class TextController : MonoBehaviour {
 			text.text = "There's a sheet tucked around the mattress and another on top of that. " +
 									"They're both an off-white, an oily yellow. They definitely should be changed.\n" +
 									"There's neither window or rafter to make any use of them, unwashed togas maybe.\n" +
-									"\n\nPress C to go back to the middle of the Cell.\n" +
+									"\n\nPress C to go back to the middle of the Cell\n" +
 									"Press S to grab the Sheets.";
 									if (Input.GetKeyDown(KeyCode.S)) 	{myState = States.getSheets;}
 		} else {
 			text.text = "There's a sheet tucked around the mattress, you tried to take it off but it was really starchy, and stuck to the mattress like glue. " +
 									"It definitely should be changed, but it doesn't look it it can be.\n" +
-									"\n\nPress C to go back to the middle of the Cell.\n";
+									"\n\nPress C to go back to the middle of the Cell\n";
 		}
 
 		if (Input.GetKeyDown(KeyCode.C)) 	{myState = States.cell;}
@@ -231,38 +234,119 @@ public class TextController : MonoBehaviour {
 	}
 
 	void corridor () {
-		text.text = "corridor";
+		if (!closetOpen) {
+			text.text = "The corridor is tall and well-lit with large barred windows near the ceiling at each end. " +
+									"Doors line the hall, perhaps other people in the same predicament, but you don't want to draw " +
+									"any unnecessary attention, or release any real dangerous criminals, you just want to get out. " +
+									"The guard is at one end of the corridor fast asleep in his chair, with one of those plane neck pillows. " +
+									"There is a wall of bars between you and him. " +
+									"At the other end of the corridor, there is the stairwell down the bathroom and showers, along with " +
+									"the gate out. In the middle of the corridor there's a plain wooden door different from the other cells, " +
+									"and, of course, your empty cell." +
+									"\n\nPress G to approach the Guard.\nPress C to go back into your cell\nPress J to checkout the Janitor's closet." +
+									"\nPress S to go down the Stairwell.";
+			} else {
+				text.text = "The corridor is tall and well-lit with large barred windows near the ceiling at each end. " +
+										"Doors line the hall, perhaps other people in the same predicament, but you don't want to draw " +
+										"any unnecessary attention, or release any real dangerous criminals, you just want to get out. " +
+										"The guard is at one end of the corridor fast asleep in his chair, with one of those plane neck pillows. " +
+										"There is a wall of bars between you and him. " +
+										"At the other end of the corridor, there is the stairwell down the bathroom and showers, along with " +
+										"the gate out. In the middle of the corridor there's an open wooden door to the janitor's closet, " +
+										"and, of course, your empty cell.\n\nPress G to approach the Guard\nPress C to go back into your cell\n" +
+										"Press J to checkout the Janitor's closet\nPress S to go down the Stairwell.";
+			}
 
 		if (Input.GetKeyDown(KeyCode.G)) 	{myState = States.guard;}
-		if (Input.GetKeyDown(KeyCode.C)) 	{myState = States.closet;}
+		if (Input.GetKeyDown(KeyCode.J)) 	{myState = States.closet;}
+		if (Input.GetKeyDown(KeyCode.C)) 	{myState = States.cell;}
 		if (Input.GetKeyDown(KeyCode.S)) 	{myState = States.stairwell;}
 	}
 
 	void closet () {
-		text.text = "closet";
+		if (!openCloset && !gotJanitorKey) {
+			text.text = "There's a plain beat-up wooden door with a tarnished brass doorknob and some gouge marks in it." +
+									"You test it, but it's locked, it seems pretty sturdy and you don't want to alert " +
+									"anybody by trying to open it.\n\nPress C to go back to the corridor";
+		} else if (!openCloset && gotJanitorKey){
+			text.text = "There's a plain beat up wooden door with a tarnished brass doorknob." +
+									"The key you found hidden in the shower scum looks like it could fit the keyhole." +
+									"\n\nPress C to go back to the corridor\nPress O to try and open the door";
 
-		if (Input.GetKeyDown(KeyCode.O)) 	{myState = States.openCloset;}
+			if (Input.GetKeyDown(KeyCode.O)) 	{myState = States.openCloset;}
+		} else if (!gotBroom && !gotUniform) {
+			text.text = "You go inside the closet and see that there's an old broom in a dry bucket in one corner, " +
+									"a slop sink in another corner, a dead cockroach in another corner, a dead mouse in another corner, " +
+									"a bottle of bleach in another corner, and a uniform hanging up on the wall. Remarkably, the slop sink " +
+									"doesn't have any soap scum at all, but then you think that they just don't use soap.\n\nPress C to go back to the Corridor" +
+									"\nPress R to eat the Roach\nPress M to eat the Mouse\nPress D to Drink the bleach\nPress B to grab the Broom\nPress U to put on the uniform.";
+
+			if (Input.GetKeyDown(KeyCode.B)) 	{myState = States.getBroom;}
+			if (Input.GetKeyDown(KeyCode.U)) 	{myState = States.getUniform;}
+		} else if (!gotUniform && gotBroom) {
+			text.text = "You go inside the closet and see that there's an old broom in a dry bucket in one corner, " +
+									"a slop sink in another corner, a dead cockroach in another corner, a dead mouse in another corner, " +
+									"a bottle of bleach in another corner, and a uniform hanging up on the wall. Remarkably, the slop sink " +
+									"doesn't have any soap scum at all, but then you think that they just don't use soap.\n\nPress C to go back to the Corridor" +
+									"\nPress R to eat the Roach\nPress M to eat the Mouse\nPress D to Drink the bleach\nPress U to put on the uniform";
+
+			if (Input.GetKeyDown(KeyCode.U)) 	{myState = States.getUniform;}
+		} else if (!gotBroom && gotUniform) {
+
+		} else {
+
+		}
+
+		if (Input.GetKeyDown(KeyCode.M)) 	{myState = States.eatMouse;}
+		if (Input.GetKeyDown(KeyCode.R)) 	{myState = States.eatRoach;}
+		if (Input.GetKeyDown(KeyCode.D)) 	{myState = States.drinkBleach;}
 		if (Input.GetKeyDown(KeyCode.C)) 	{myState = States.corridor;}
 	}
 
 	void openCloset () {
-		text.text = "openCloset";
+		text.text = "You take out the key where you've been stashing it, wipe it off a bit, and put it in the keyhole. " +
+								"It doesn't fit. It must be for something else.\nWait a second, you flip it over and it goes in. " +
+								"You turn the key, hear the door unlock, and push it open.";
 		closetOpen = true;
 
-		if (Input.GetKeyDown(KeyCode.C)) 	{myState = States.corridor;}
-		if (Input.GetKeyDown(KeyCode.Space)) 	{myState = States.insideCloset;}
+		if (Input.GetKeyDown(KeyCode.C)) 			{myState = States.corridor;}
+		if (Input.GetKeyDown(KeyCode.Space)) 	{myState = States.closet;}
 	}
 
-	void insideCloset () {
-		text.text = "insideCloset";
+	void eatRoach () {
+		text.text = "You walk to the corner of the room and look down at your next meal. " +
+								"Wait, what are you doing? You just got here, you're not even hungry, nevermind starving, " +
+								"and eating a roach is just disgusting, no one in their right mind would do something like that." +
+								"\n\nPress Space to go look around the room.";
 
-		if (Input.GetKeyDown(KeyCode.B)) 	{myState = States.getBroom;}
-		if (Input.GetKeyDown(KeyCode.U)) 	{myState = States.getUniform;}
-		if (Input.GetKeyDown(KeyCode.C)) 	{myState = States.corridor;}
+		if (Input.GetKeyDown(KeyCode.Space)) 	{myState = States.closet;}
+	}
+
+	void eatMouse () {
+		if (!ateMouse) {
+			text.text = "You walk to the corner of the room and look down at your next meal. " +
+									"Wait, what are you doing? You just got here, you're not even hungry, nevermind starving." +
+									"Still, you can't resist, you just can't control yourself." +
+									"You pick up the dead mouse, put it in your mouth, and chomp. It's still crunchy, but could use some salt." +
+									"\n\nPress Space to look around the closet.";
+
+			ateMouse = true;
+		} else {
+			text.text = "You walk to the corner of the room and look down at your next meal. " +
+									"Wait, what are you doing? You just got here, you're not even hungry, you already ate dead mouse." +
+									"Another mouse died in the exact same corner now, so soon?" +
+									"Still, you can't resist, you have always had these uncontrollable compulsions, and you know this mouse is fresh." +
+									"You pick up the fresh dead mouse, put it in your mouth, and chomp. It's crunchy and juicy, but could use some salt." +
+									"\n\nPress Space to look around the closet.";
+		}
+
+		if (Input.GetKeyDown(KeyCode.Space)) 	{myState = States.closet;}
 	}
 
 	void getBroom () {
-		text.text = "getBroom";
+		text.text = "You pick up the broom. You think you don't have enough space for it, but prison has made you resourceful." +
+								"You check out the bucket, but it has a hole in the bottom of it. It wouldn't be very useful even if you had a mop." +
+								"\n\nPress Space to look around the closet.";
 		gotBroom = true;
 
 		if (Input.GetKeyDown(KeyCode.Space)) 	{myState = States.insideCloset;}
