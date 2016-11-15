@@ -23,12 +23,13 @@ public class TextController : MonoBehaviour {
 	private bool gotKeyring 	 = false;
 	private bool gotUniform 	 = false;
 	private bool ateMouse 		 = false;
+	private bool dadSawYou		 = false;
 
 	// Use this for initialization
 	void Start () {
 		text.text =             "Your family's soap scum cleaning business has been a hit, and " +
-								"you now employ over 30 people in the community. One day, " +
-								"you were invited to clean soap scum at the governor's mansion. " +
+								"you now employ over 30 people in the community since you started bottling and selling the stuff. " +
+								"One day, you were invited to clean soap scum at the governor's mansion. " +
 								"Needless to say, it was a great honor for a once poor family " +
 								"such as your own. Dreaming of riches, you headed off to the palace " +
 								"barely able to keep your heart in your chest. You were told to enter " +
@@ -369,21 +370,46 @@ public class TextController : MonoBehaviour {
 	}
 
 	void guard () {
-		text.text = "guard";
+		if (!gotKeyring) {
+			text.text = "You cautiously approach the guard until you are right near the bars by him. " +
+						"He has his feet up on his desk and is leaning back in his chair, passed out and snoring. " +
+						"His belly is sticking out of the bottom of his shirt, and you notice that there is no hair. This information might come in handy. " +
+						"Around his belt there are a set of keys on a hook, the literal keys to your freedom!\n" +
+						"Press K to grab the Keyring\nPress C to go back to the Corridor;
+		}else {
+			text.text = "You skip up the bars whistling a jaunty tune! The guard snorts violently, and then goes right back to snoring. " +
+						"How do they choose the guards in these places?";
+		}
 
 		if (Input.GetKeyDown(KeyCode.K)) 	{myState = States.getKeyring;}
 		if (Input.GetKeyDown(KeyCode.C)) 	{myState = States.corridor;}
 	}
 
 	void getKeyring () {
-		text.text = "getKeyring";
-		gotKeyring = true;
-
+		if(!gotBroom) {
+			text.text = "Slowly, very slowly you lean closer to the bars and reach out towards the keyring. " +
+						"You stretch and strain and, admittedly, even release some gas, but the keys are RIGHT out of reach." +
+						"If only it could be so easy!\n" +
+						"Press Space to continue.";
+		}else {
+			text.text = "Slowly, very slowly you lean closer to the bars and reach out towards the keyring. " +
+						"You stretch and strain and, admittedly, almost release some gas, but then you remeber the broom. " +
+						"EUREKA! You pull out the broom and then use the handle to reach towards the keyring...\n" +
+						"Nerves get the better of you and you shake, the end of the handle pokes the guard right in his exposed gut, " +
+						"then right in his neck pillow. You even poke him right in the eye! He rubs his face and grumbles, but stays asleep. " +
+						"FOCUS DAMN YOU! THIS IS YOUR LIFE AT STAKE HERE! Finally, you get the keyring onto the end of the broomstick and pull it back off the guard's belt.\n" +
+						"Finally, you can get out of here!\n"
+						"Press space to continue.";
+			gotKeyring = true;
+		}
+		
 		if (Input.GetKeyDown(KeyCode.Space)) 	{myState = States.guard;}
 	}
 
 	void stairwell () {
-		text.text = "stairwell";
+		text.text = "The stairway is old and dirty, it hasn't been mopped in a long long time, if someone used soap on it, there'd be scum. " +
+					"There are 3 ways to go from the stairs, to the bathroom, to the corridor, or to the gate with sunlight coming through it.\n" +
+					"Press G to go to the Gate\nPress C to go to the Corridor\nPress B to go to the Bathroom";
 
 		if (Input.GetKeyDown(KeyCode.G)) 	{myState = States.gate;}
 		if (Input.GetKeyDown(KeyCode.C)) 	{myState = States.corridor;}
@@ -391,20 +417,47 @@ public class TextController : MonoBehaviour {
 	}
 
 	void gate () {
-		text.text = "gate";
+		if(!dadSawYou) {
+			text.text = "You walk down the stairs to the gate on the bottom floor. You look out and there's not even a wall outside, it's a street. " +
+						"Across the street there's a rotten wooden bench with a covering over it with moss growing on the roof." +
+						"Sitting on that rotten wooden bench, is a rotten wooden old man, and he's picking his nose. Where the hell are you?" +
+						"Wait a second, you know exactly where you are, this is the town where you grew up, and that's your father picking his nose!" +
+						"You wave and scream to get his attention, but he's as blind as a bat and deaf as a... wait, he's not deaf and he has perfect eyesight!" +
+						"'Papa! Papa! Please save your boy!', you scream. He looks up. Thank God! Fantasies of dynamite and tools flash through your mind!\n" +
+						"He extends his arm, and then extends his middle finger. Then he looks over and the bus crosses in front of him and stops. " +
+						"He keeps flipping you off through the windows of the bus... he's still sore that you bottled and sold the family soapscum cleaning secret. Asshole."\n
+						"Press O to open the gate\nPress S to go back to the Stairwell";  
+			dadSawYou=true;
+		}else {
+			text.text "You look out on a rotten old bus stop, if you could get out of here you'd be free and easy.\n" +
+						"Press O to open the gate\nPress S to go back to the Stairwell";
+		}
 
 		if (Input.GetKeyDown(KeyCode.O)) 	{myState = States.openGate;}
 		if (Input.GetKeyDown(KeyCode.S)) 	{myState = States.stairwell;}
 	}
 
 	void openGate () {
-		text.text = "openGate";
+		if(!gotKeyring) {
+			text.text = "You shake the gate but they actually locked this one. A passerby gives you a sideways glance and then spits on the ground in front of them with a gruff.\n" +
+						"Press Space to go back to the Stairwell";
+						
+			if (Input.GetKeyDown(KeyCode.Space)) 	{myState = States.stairwell;}
+		}else {
+			text.text = "You reach through the bars and frantically try every key in the hole on the other side... none of them are fitting. " +
+						"A passerby gives you a sideways glance, and then spits on the ground in front of them without taking much notice. " +
+						"Finally, you got it! The lock turns and the gate swings open! Free at last, free at last!\n" +
+						"Press Space to Escape!";
+			if (Input.GetKeyDown(KeyCode.Space)) 	{myState = States.exit;}
+		}
 
-		if (Input.GetKeyDown(KeyCode.Space)) 	{myState = States.exit;}
 	}
 
 	void bathroom () {
-		text.text = "bathroom";
+		text.text = "You head down the stairs into the bathroom, you look around but all you see is soap scum everywhere. " +
+					"On the sinks against the wall, on the tiles on the floor, on the tiles on the walls, on the tiles on the ceiling. " +
+					"Literally every tile has soap scum, this is hell.There's a doorway to the toilets and another to the showers.\n" +
+					"Press T to go to the Toilets\nPress S to go to the Showers\nPress B to go Back to the stairwell";
 
 		if (Input.GetKeyDown(KeyCode.T)) 	{myState = States.toilet;}
 		if (Input.GetKeyDown(KeyCode.S)) 	{myState = States.shower;}
@@ -412,30 +465,42 @@ public class TextController : MonoBehaviour {
 	}
 
 	void toilet () {
-		text.text = "toilet";
+		text.text = "There are a bunch of stinky toilets along the wall, they are shorter than is comfortable for your legs, but they do the trick for your bowels.\n" +
+					"Press U to Use the toilet\nPress B to go back to the Bathroom entrance";
 
 		if (Input.GetKeyDown(KeyCode.U)) 	{myState = States.useToilet;}
 		if (Input.GetKeyDown(KeyCode.B)) 	{myState = States.bathroom;}
 	}
 
 	void useToilet () {
-		text.text = "useToilet";
-		usedToilet = true;
-		cloggedToilet = true;
+		if(!usedToilet && !cloggedToilet) {
+			text.text = "You're happy to get out of your cell for freedom, but you're really happy to get out of your cell to ride one of these porcelian stallions " +
+						"and you're going to take it for a ride into the great unknown. You drop your drawers and squat down over the shiniest steed. BOOM, and it's over. " +
+						"It feels like the first time you had sex, but there's no one left disappointed.\n" +
+						"You get up and flush, o no. O NO! The toilet is very disappointed, in fact, it's still hungry and clogged with disappointment.\n" +
+						"Press U to Unclog the toilet\nPress B to Back away and leave it for the next guy";
+			usedToilet = true;
+			cloggedToilet = true;
+			if (Input.GetKeyDown(KeyCode.U)) 	{myState = States.unclogToilet;}
+		}else if(usedToilet && cloggedToilet) {
+			text.text = "Why are you back here? They say that a criminal always returns to the scene of the crime. " +
+						"But you're not a criminal, you've been imprisoned unjustly. What law says a man must unclog their own toilet!? " +
+						"Still, looking down into the bowl, you just can't shake the guilt.\n" +
+						"Press U to Unclog the toilet\nPress B to go Back to the bathroom";
+			if (Input.GetKeyDown(KeyCode.U)) 	{myState = States.unclogToilet;}
+		}else {
+			text.text = "Looking at the toilets you imagine the Germans probably have a word for being proud and not proud at the same time. " +
+						"They definitely should.\nPress B to go Back to the bathroom"
+		}
 
 		if (Input.GetKeyDown(KeyCode.B)) 	{myState = States.bathroom;}
-		if (Input.GetKeyDown(KeyCode.U)) 	{myState = States.unclogToilet;}
-	}
-
-	void clogged () {
-		text.text = "clogged";
-
-		if (Input.GetKeyDown(KeyCode.B)) 	{myState = States.bathroom;}
-		if (Input.GetKeyDown(KeyCode.U)) 	{myState = States.unclogToilet;}
 	}
 
 	void unclogToilet () {
-		text.text = "unclogToilet";
+		text.text = "You can't bear the guilt, you have a very low tolerance for it. So low, you plunge your fist through what is better left unsaid. " +
+					"You punch your way through until you get you hand wrapped up in something that you didn't eat. Or did you? No, no, you definitely didn't eat a towel." +
+					"You grab what your hand is on and pull it out. It's a rag, a dirty old rag. There's a picture of a cat licking it's paw on it, but now it's paw is covered in shit. " +
+					"It's dirty, but it's still a rag, that's why they're called rags. You put it in your pocket.\nPress Space to continue";
 		gotRag = true;
 		cloggedToilet = false;
 
@@ -443,22 +508,46 @@ public class TextController : MonoBehaviour {
 	}
 
 	void shower () {
-		text.text = "shower";
-
-		if (Input.GetKeyDown(KeyCode.U)) 	{myState = States.useShower;}
-		if (Input.GetKeyDown(KeyCode.C)) 	{myState = States.cleanShower;}
-		if (Input.GetKeyDown(KeyCode.B)) 	{myState = States.bathroom;}
+		if(!cleanedShower) {
+			text.text = "The shower is even dirtier than the bathroom, except with more hair. You've never seen so much soap scum in your life. " +
+						"If you added up all of the soap scum you ever saw, ever since your father took you to clean bathrooms as a baby, you'd only get " +
+						"only about halfway through the layer of scum on the floor. It is horrible, but so horrible you can't look away.\n" +
+						"Press U to Use the shower\nPress B to go Back to the bathroom\nPress C to clean the scum";
+			if (Input.GetKeyDown(KeyCode.C)) 	{myState = States.cleanShower;}
+		}else {
+		text.text = "The shower is even dirtier than the bathroom, for that one clean spot you made. That's your spot, it will always be your spot. " +
+					"It is beautiful, but so horrible you can't look away.\n" +
+					"Press U to Use the shower\nPress B to go Back to the bathroom\nPress C to clean the scum";
+		}
+			if (Input.GetKeyDown(KeyCode.U)) 	{myState = States.useShower;}
+			if (Input.GetKeyDown(KeyCode.B)) 	{myState = States.bathroom;}
 	}
 
 	void useShower () {
-		text.text = "useShower";
+		text.text = "You haven't showered since yesterday, a relaxing shower would be nice. you take a step but then you remember the layer of " +
+					"soap scum... you can't bring yourself to step in it. Wait a minute, you're going to be executed! There's no time for a shower!\n" +
+					"Press Space to continue";
 
 		if (Input.GetKeyDown(KeyCode.Space)) 	{myState = States.shower;}
 	}
 
 	void cleanShower () {
-		text.text = "cleanShower";
-		gotJanitorKey = true;
+		if(!gotRag) {
+			text.text = "You can't help it! You have to clean the shower! It's in your blood! Your soul cries out for you to clean this scum!!!" +
+						"You get down on your hands and knees, you beat, you bite, you claw, you pound against the scum, but it is too strong. " +
+						"'PAPA!!!! MAMA!!!!!', you cry out, but there's not even a smudge in this scum. Tears and snot stream down your pathetic face. " +
+						"You have never faced a foe so strong before. Soaked in sweat, you finally give up and you lay there defeated in a pool of shame.\n"
+						"Press Space to get back up and be a man";
+		}else {
+			text.text = "You pull out the kitten rag, wipe it across your brow and get it wet with sweat. Your sweat is the secret ingredient to your family's " +
+						"soap scum business. A trade passed down from generation to generation. There is an old legend that says that the one who bottles and sells " +
+						"the family's sweat, instead of making their living off the sweat of their brow will be cursed, but there's no time to think of old wive's tales now " +
+						"You are compelled by a force, a force too strong to describe, and you get down on your hands and knees and scrub the floor. YES, YES! The rag is working! " +
+						"The scum stands no chance against you and your weapon of glory! What? No, the rag is wearing down and NO! It got caght on something and ripped in twain. " +
+						"What devilry is this!? You look and see a key that was lodged in the soap scum. It was pulled loose when it ripped the rag. You pick it up, it says Proops on it.\n" +
+						"Press Space to get up, you may have lost the battle, but you shall win the war!";
+			gotJanitorKey = true;
+		}
 
 		if (Input.GetKeyDown(KeyCode.Space)) 	{myState = States.shower;}
 	}
