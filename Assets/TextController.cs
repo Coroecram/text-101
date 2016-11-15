@@ -282,19 +282,26 @@ public class TextController : MonoBehaviour {
 			if (Input.GetKeyDown(KeyCode.B)) 	{myState = States.getBroom;}
 			if (Input.GetKeyDown(KeyCode.U)) 	{myState = States.getUniform;}
 		} else if (!gotUniform && gotBroom) {
-			text.text = "You go inside the closet and see that there's an old broom in a dry bucket in one corner, " +
+			text.text = "You go inside the closet and see that there's an empty a dry bucket in one corner with a hole in the bottom, " +
 									"a slop sink in another corner, a dead cockroach in another corner, a dead mouse in another corner, " +
 									"a bottle of bleach in another corner, and a uniform hanging up on the wall. Remarkably, the slop sink " +
 									"doesn't have any soap scum at all, but then you think that they just don't use soap.\n\nPress C to go back to the Corridor" +
 									"\nPress R to eat the Roach\nPress M to eat the Mouse\nPress D to Drink the bleach\nPress U to put on the uniform";
-
 			if (Input.GetKeyDown(KeyCode.U)) 	{myState = States.getUniform;}
 		} else if (!gotBroom && gotUniform) {
-
+			text.text = "You go inside the closet and see that there's an old broom in a dry bucket in one corner, " +
+						"a slop sink in another corner, a dead cockroach in another corner, a dead mouse in another corner, " +
+						"a bottle of bleach in another corner. Remarkably, the slop sink " +
+						"doesn't have any soap scum at all, but then you think that they just don't use soap.\n\nPress C to go back to the Corridor" +
+						"\nPress R to eat the Roach\nPress M to eat the Mouse\nPress D to Drink the bleach\nPress B to grab the Broom";
+			if (Input.GetKeyDown(KeyCode.B)) 	{myState = States.getBroom;}
 		} else {
-
+			text.text = "You go inside the closet and see that there's an empty dry bucket in one corner with a hole in the bottom, " +
+						"a slop sink in another corner, a dead cockroach in another corner, a dead mouse in another corner, " +
+						"a bottle of bleach in another corner. Remarkably, the slop sink " +
+						"doesn't have any soap scum at all, but then you think that they just don't use soap.\n\nPress C to go back to the Corridor" +
+						"\nPress R to eat the Roach\nPress M to eat the Mouse\nPress D to Drink the bleach";
 		}
-
 		if (Input.GetKeyDown(KeyCode.M)) 	{myState = States.eatMouse;}
 		if (Input.GetKeyDown(KeyCode.R)) 	{myState = States.eatRoach;}
 		if (Input.GetKeyDown(KeyCode.D)) 	{myState = States.drinkBleach;}
@@ -342,7 +349,7 @@ public class TextController : MonoBehaviour {
 	}
 
 	void getBroom () {
-		text.text = "You pick up the broom. You think you don't have enough space for it, but prison has made you resourceful." +
+		text.text = "You pick up the broom. You didn't think you had enough space for it, but prison has made you resourceful." +
 								"You check out the bucket, but it has a hole in the bottom of it. It wouldn't be very useful even if you had a mop." +
 								"\n\nPress Space to look around the closet.";
 		gotBroom = true;
@@ -351,7 +358,11 @@ public class TextController : MonoBehaviour {
 	}
 
 	void getUniform () {
-		text.text = "getUniform";
+		text.text = "You pull the uniform up and off the hook. You hold it up and it looks like it would fit you perfectly. " +
+					"It'd be nice if it was ever washed, but it wasn't and it's covered in little splotches of every shade of brown. " +
+					"Most of it is soft, greasy soft, but the front, especially near the crotch, and sleevecuffs are starchy stiff. " +
+					"You step into each leg and the zipper crunches as you pull it all the way up in front. " + 
+					"Your nametag says Proops, for the person who cleans poops.";
 		gotUniform = true;
 
 		if (Input.GetKeyDown(KeyCode.Space)) 	{myState = States.insideCloset;}
