@@ -1,7 +1,8 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace />
-  <MonoDevelop.Ide.Workbench ActiveDocument="..\NumberWizardUI\Assets\LevelManager.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\TextController.cs">
     <Files>
+      <File FileName="Assets\TextController.cs" Line="282" Column="22" />
       <File FileName="..\NumberWizardUI\Assets\LevelManager.cs" Line="8" Column="24" />
     </Files>
   </MonoDevelop.Ide.Workbench>
